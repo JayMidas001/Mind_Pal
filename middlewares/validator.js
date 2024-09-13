@@ -18,9 +18,9 @@ const validationSignUp = (req, res, next) => {
       .required()
       .pattern(new RegExp(/^[A-Za-z]+(?: [A-Za-z]+)*$/)) // Adjust regex to disallow punctuation
       .messages({
-        "any.required": "First name is required.",
-        "string.empty": "First name cannot be an empty string.",
-        "string.min": "First name must be at least 3 characters long.",
+        "any.required": "Last name is required.",
+        "string.empty": "Last name cannot be an empty string.",
+        "string.min": "Last name must be at least 3 characters long.",
         "string.pattern.base": "First name cannot start or end with whitespace and cannot contain punctuation.",
       }),
     email: Joi.string().email().required().messages({

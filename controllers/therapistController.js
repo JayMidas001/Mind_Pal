@@ -19,7 +19,7 @@ exports.signUpTherapist = async (req, res) => {
             return res.status(401).json({ message: 'Enter all fields.' });
         }
 
-        const emailExist = await therapistModel.findOne({ email });
+        const emailExist = await therapistModel.findOne({ email: email.toLowerCase() });
         if (emailExist) {
             return res.status(400).json({ message: 'Therapist already exists' });
         }
@@ -53,7 +53,7 @@ exports.signUpTherapist = async (req, res) => {
             idCard: idCardUrl,
             certificate: certificateUrl,
             phoneNumber,
-            email,
+            email: email.toLowerCase(),
             password: hashedPassword,
         });
 
@@ -83,7 +83,7 @@ exports.verifyEmail = async(req, res)=>{
         //extract the token from the request params
         const {email} = jwt.verify(token, process.env.JWT_SECRET)
         //find the therapist email
-        const therapist =await therapistModel.findOne({email})
+        const therapist =await therapistModel.findOne({email: email.toLowerCase()})
         // check if the therapist is in the database
         if(!therapist){
             return res.status(404).json({
@@ -162,7 +162,7 @@ exports.resendVerificationEmail = async(req, res)=>{
     try {
         const{email} = req.body
         //find the therapist with the email
-        const therapist = await therapistModel.findOne({email})
+        const therapist = await therapistModel.findOne({email: email.toLowerCase()})
         //check if the therapist is still in the database
         if(!therapist){
             return res.status(404).json({
@@ -204,7 +204,7 @@ exports.forgotPassword = async (req, res)=>{
         const{email}= req.body
 
         //check if the email exist in the database
-        const therapist = await therapistModel.findOne({email})
+        const therapist = await therapistModel.findOne({email: email.toLowerCase()})
         if(!therapist){
             return res.status(404).json({
                 message: 'therapist not found'
@@ -243,7 +243,7 @@ exports.resetPassword = async(req, res)=>{
         const {email}= jwt.verify(token, process.env.JWT_SECRET)
         
         //find therapist by ID
-        const therapist = await therapistModel.findOne({email})
+        const therapist = await therapistModel.findOne({email: email.toLowerCase()})
         if(!therapist){
             return res.status(404).json({
                 message: 'therapist not found'
@@ -280,7 +280,7 @@ exports.changePassword = async(req, res)=>{
         const {email} = jwt.verify(token, process.env.JWT_SECRET)
 
         //find the ID
-        const therapist = await therapistModel.findOne({email})
+        const therapist = await therapistModel.findOne({email: email.toLowerCase()})
         if(!therapist){
             return res.status(404).json({
                 message: ' therapist not found'
@@ -438,7 +438,7 @@ exports.logOutTherapist = async (req, res) => {
         // Verify the therapist's token and extract the therapist's email from the token
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
         // Find the therapist by ID
-        const therapist = await therapistModel.findOne({ email });
+        const therapist = await therapistModel.findOne({ email: email.toLowerCase()});
         if (!therapist) {
             return res.status(404).json({
                 message: "Therapist not found"

@@ -10,7 +10,7 @@ const { validationSignUp, validationLogIn, validationEmail, validationPassword, 
 
 router.post("/sign-up",validationSignUp, signUp)
 
-router.post("log-in",validationLogIn, loginUser)
+router.post("/log-in",validationLogIn, loginUser)
 
 router.get('/verify/:token', verifyEmail)
 

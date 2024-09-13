@@ -18,7 +18,7 @@ exports.signUp = async (req, res) => {
                 message: 'Enter all fields.'
             })
         }
-        const emailExist = await userModel.findOne({ email });
+        const emailExist = await userModel.findOne({ email: email.toLowerCase()});
         if (emailExist) {
             return res.status(400).json('User with email already exist.');
         } else {
@@ -30,7 +30,7 @@ exports.signUp = async (req, res) => {
             const user = new userModel({
                 firstName,
                 lastName,
-                email,
+                email: email.toLowerCase(),
                 password: hashedPassword
             });
 
@@ -69,7 +69,7 @@ exports.verifyEmail = async (req, res) => {
         // Extract the email from the verified token
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
         // Find the user with the email
-        const user = await userModel.findOne({ email });
+        const user = await userModel.findOne({ email: email.toLowerCase()});
         // Check if the user is still in the database
         if (!user) {
             return res.status(404).json({
@@ -108,7 +108,7 @@ exports.loginUser = async (req, res) => {
                 message: 'Enter all fields (Email & Password).'
             })
         }
-        const existingUser = await userModel.findOne({email});
+        const existingUser = await userModel.findOne({email: email.toLowerCase()});
         if (!existingUser) {
             return res.status(404).json({
                 message: "User not found.",
@@ -156,7 +156,7 @@ exports.resendVerificationEmail = async (req, res) => {
     try {
         const { email } = req.body;
         // Find the user with the email
-        const user = await userModel.findOne({ email });
+        const user = await userModel.findOne({ email: email.toLowerCase() });
         // Check if the user is still in the database
         if (!user) {
             return res.status(404).json({
@@ -201,7 +201,7 @@ exports.forgotPassword = async (req, res) => {
         const { email } = req.body;
 
         // Check if the email exists in the database
-        const user = await userModel.findOne({ email });
+        const user = await userModel.findOne({ email: email.toLowerCase() });
         if (!user) {
             return res.status(404).json({
                 message: "User not found",
@@ -244,7 +244,7 @@ exports.resetPassword = async (req, res) => {
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
 
         // Find the user by ID
-        const user = await userModel.findOne({ email });
+        const user = await userModel.findOne({ email: email.toLowerCase() });
         if (!user) {
             return res.status(404).json({
                 message: "User not found",
@@ -436,7 +436,7 @@ exports.logOut = async (req, res) => {
         // Verify the user's token and extract the user's email from the token
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
         // Find the user by ID
-        const user = await userModel.findOne({ email });
+        const user = await userModel.findOne({ email: email.toLowerCase() });
         if (!user) {
             return res.status(404).json({
                 message: "User not found"

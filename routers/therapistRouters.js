@@ -3,7 +3,7 @@ const express = require('express')
 require('../controllers/therapistController')
 
 const upload = require('../utils/multer')
-const { signUpTherapist, verifyEmail, logInTherapist, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOneTherapist, getAllTherapists, updateTherapist, deleteTherapist } = require('../controllers/therapistController')
+const { signUpTherapist, verifyEmail, logInTherapist, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOneTherapist, getAllTherapists, updateTherapist, deleteTherapist, logOutTherapist } = require('../controllers/therapistController')
 const { validationSignUp, validationLogIn, validationEmail, validationPassword, validationUpdate } = require('../middlewares/therapistValidator')
 
 
@@ -33,5 +33,7 @@ router.get('/all',getAllTherapists)
 router.put('/update/:therapistId', upload.single('photo'),validationUpdate, updateTherapist)
 
 router.delete('/delete/:id', deleteTherapist)
+
+router.post("/log-out", logOutTherapist)
 
 module.exports = router
