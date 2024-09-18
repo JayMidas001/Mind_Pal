@@ -1,6 +1,6 @@
 const therapistModel = require("../models/therapistModel")
 const fs = require('fs')
-require('dotenv')
+require('dotenv').config()
 const cloudinary = require(`../utils/cloudinary`)
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -13,9 +13,9 @@ const {
 
 exports.signUpTherapist = async (req, res) => {
     try {
-        const { firstName, lastName, specialty, phoneNumber, email, password } = req.body;
+        const { firstName, lastName, specialty, educationalLevel, feildExperience, phoneNumber, email, password } = req.body;
 
-        if (!firstName || !lastName || !specialty || !phoneNumber || !email || !password) {
+        if (!firstName || !lastName || !specialty || !educationalLevel || !feildExperience || !phoneNumber || !email || !password) {
             return res.status(401).json({ message: 'Enter all fields.' });
         }
 
@@ -47,9 +47,10 @@ exports.signUpTherapist = async (req, res) => {
         }
         const therapist = new therapistModel({
             firstName,
-
             lastName,
             specialty,
+            educationalLevel,
+            feildExperience,
             idCard: idCardUrl,
             certificate: certificateUrl,
             phoneNumber,
@@ -57,8 +58,8 @@ exports.signUpTherapist = async (req, res) => {
             password: hashedPassword,
         });
 
-        const therapistToken = jwt.sign({ id: therapist._id, email: therapist.email }, process.env.JWT_SECRET, { expiresIn: '3m' });
-        const verifyLink = `${req.protocol}://${req.get('host')}/api/v1/verify${therapistToken}`;
+        const therapistToken = jwt.sign({ id: therapist._id, email: therapist.email }, process.env.JWT_SECRET, { expiresIn: '10m' });
+        const verifyLink = `${req.protocol}://${req.get('host')}/api/v1/therapist/verify/${therapistToken}`;
 
         await therapist.save();
         await sendMail({
@@ -178,7 +179,7 @@ exports.resendVerificationEmail = async(req, res)=>{
         }
 
         const token = jwt.sign({email:therapist.email}, process.env.JWT_SECRET, {expiresIn: '20min'})
-        const verifyLink = `${req.protocol}://${req.get('host')}/api/v1/verify/${token}`
+        const verifyLink = `${req.protocol}://${req.get('host')}/api/v1/therapist/verify/${token}`
         let mailOptions ={
             email: therapist.email,
             subject:'verification Email',
@@ -213,7 +214,7 @@ exports.forgotPassword = async (req, res)=>{
 
         // generate a reset token
         const resetToken = jwt.sign({email:therapist.email}, process.env.JWT_SECRET,{expiresIn:'30m'})
-        const resetLink = `${req.protocol}://${req.get('host')}/api/v1/reset-password/${resetToken}`
+        const resetLink = `${req.protocol}://${req.get('host')}/api/v1/therapist/reset-password/${resetToken}`
 
         //send a reset password email
         const mailOptions = {

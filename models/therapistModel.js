@@ -18,6 +18,16 @@ const therapistSchema = new mongoose.Schema({
         required:[true, "Kindly enter your specialty"],
         required: true
      },
+     educationalLevel: { 
+        type: String, 
+        required:[true, "Kindly enter your level of education"],
+        required: true
+     },
+     feildExperience: { 
+        type: String, 
+        required:[true, "Kindly enter your experience on the field"],
+        required: true
+     },
     idCard: { 
         type: String,
         
@@ -39,6 +49,15 @@ const therapistSchema = new mongoose.Schema({
     },
     isVerified:{type: Boolean, 
         default: false},
+    subscriptionStatus:{
+        type:String,
+        enum:["inactive", "active"],
+        default: "inactive"
+    },
+    appointments: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'appointment'
+    }],
     blackList:[]
 },{timestamps: true})
 

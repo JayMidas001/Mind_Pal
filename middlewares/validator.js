@@ -21,7 +21,7 @@ const validationSignUp = (req, res, next) => {
         "any.required": "Last name is required.",
         "string.empty": "Last name cannot be an empty string.",
         "string.min": "Last name must be at least 3 characters long.",
-        "string.pattern.base": "First name cannot start or end with whitespace and cannot contain punctuation.",
+        "string.pattern.base": "Last name cannot start or end with whitespace and cannot contain punctuation.",
       }),
     email: Joi.string().email().required().messages({
       "any.required": "Email is required.",

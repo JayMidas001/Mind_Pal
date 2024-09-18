@@ -4,8 +4,10 @@ const upload = require("../utils/multer")
 const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getAll, getOne, deleteUser, makeAdmin, logOut, updateUser } = require("../controllers/userController")
 
 const router = express.Router()
-const auth = require("../middlewares/auth")
+
 const { validationSignUp, validationLogIn, validationEmail, validationPassword, validationUpdate } = require("../middlewares/validator")
+
+const authorize = require("../middlewares/auth")
 
 
 router.post("/sign-up",validationSignUp, signUp)
@@ -24,13 +26,13 @@ router.post('/reset-password/:token', resetPassword)
 
 router.put("/update-user/:userId",upload.single('image'), validationUpdate, updateUser)
 
-router.get('/getall',auth, getAll)
+router.get('/getall',authorize, getAll)
 
 router.get('/getone/:userId', getOne)
 
-router.delete('/delete/:userId', deleteUser)
+router.delete('/delete/:userId',authorize, deleteUser)
 
-router.get('/makeadmin/:userId', makeAdmin)
+router.get('/makeadmin/:userId',authorize, makeAdmin)
 
 router.post("/log-out", logOut)
 

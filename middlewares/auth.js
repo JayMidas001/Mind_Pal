@@ -1,40 +1,59 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
+const userModel = require('../models/userModel')
 
 //create an athentication
-const auth = async (req,res,next)=>{
+const authorize = async (req, res, next) => {
     try {
-        //get authorization header
-        const auth =await req.headers.authorization;
-        if(!auth){
-            return res.status(401).json({
-                message:'See the admin for authorization'
-            })
-        }else{
-            //get the token from the authorization header
-            const token = await auth.split(' ')[1]
-            if(token){
-                jwt.verify(token, process.env.JWT_SECRET, (error, payload)=>{
-                    if(error){
-                        res.json({
-                            message: ' Error trying to verify user.'
-                        })
-                    }else{
-                        res.user = payload
-                        next()
-                    }
-                })
-            }else{
-                res.status(404).json({
-                    message:'Admin does not have a token'
-                })
-            }
-        }
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
-    }
-}
+        const auth = req.headers.authorization;
 
-module.exports = auth
+        if (!auth) {
+            return res.status(401).json({
+                message: 'Authorization required'
+            });
+        }
+
+        const token = auth.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).json({
+                message: 'Action requires sign-in. Please log in to continue.'
+            });
+        }
+
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await userModel.findById(decodedToken.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'Authentication Failed: User not found'
+            });
+        }
+
+        if(!user.isAdmin){
+            return res.status(403).json({
+                message:`Authentication failed: User is not allowed to access this route.`
+            })
+        }
+
+        // Check if the token is blacklisted
+        if (user.blackList && user.blackList.includes(token)) {
+          return res.status(401).json({ message: 'Token has been blacklisted. Please log in again.' });
+      }
+
+        req.user = user;
+
+        next();
+
+    } catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			return res.status(401).json({ message: 'Token has expired. Please log in again.' });
+		} else if (error instanceof jwt.JsonWebTokenError) {
+			return res.status(401).json({ message: "Oops! Access denied. Please sign in." });
+		}
+		res.status(500).json({ message: error.message });
+	}
+};
+
+module.exports = authorize

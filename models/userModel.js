@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema({
         default: false},
     isVerified:{type: Boolean, 
         default: false},
+    appointments: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'appointment'
+        }],
+    messages: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Message',  // This references the 'Message' model
+          }],
     blackList:[]
 },{timestamps: true})
 
