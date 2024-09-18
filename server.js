@@ -8,9 +8,8 @@ const therapistRouter = require("./routers/therapistRouters")
 const appointmentRouter = require("./routers/appoinmetRouter")
 
 app.use(express.json())
-
+app.use(cors({ origin: "*"}));
 app.use('/uploads',express.static('uploads'))
-app.use(cors({ origin: "*", credentials: true}));
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/therapist", therapistRouter)
 app.use("/api/v1/appointments", appointmentRouter)
