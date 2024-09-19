@@ -90,6 +90,7 @@ exports.verifyEmail = async (req, res) => {
         res.status(200).json({
             message: "User verified successfully",
         });
+        return res.redirect('https://mindpal-11.vercel.app/#/waitingforverification')
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
             return res.json({ message: "Link expired." });
