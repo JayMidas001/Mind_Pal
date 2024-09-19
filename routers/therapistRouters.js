@@ -25,7 +25,7 @@ router.post(`/forgot-password`,validationEmail, forgotPassword)
 
 router.post(`/change-password/:token`,validationPassword, changePassword)
 
-router.post(`/reset-password/:token`, resetPassword)
+router.get(`/reset-password/:token`, resetPassword)
 
 router.get('/one/:therapistId', getOneTherapist)
 
