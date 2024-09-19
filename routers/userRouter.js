@@ -22,7 +22,7 @@ router.post('/forgot-password',validationEmail, forgotPassword)
 
 router.post('/change-password/:token',validationPassword, changePassword)
 
-router.get('/reset-password/:token', resetPassword)
+router.post('/reset-password/:token', resetPassword)
 
 router.put("/update-user/:userId",upload.single('image'), validationUpdate, updateUser)
 
