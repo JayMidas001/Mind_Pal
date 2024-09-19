@@ -35,37 +35,7 @@ const validationSignUp = (req, res, next) => {
         "any.required": "Password is required.",
         "string.pattern.base":
           "Password must contain at least 8 characters, one capital letter, and one special character (!@#$%^&*).",
-      }),
-    specialty: Joi.string()
-    .min(3)
-    .required()
-    .pattern(new RegExp(/^[A-Za-z .,'-]+$/))  // Allows letters, spaces, and common punctuations (.,'-)
-    .messages({
-        "any.required": "First name is required.",
-        "string.empty": "First name cannot be an empty string.",
-        "string.min": "First name must be at least 3 characters long.",
-        "string.pattern.base": "First name can only contain letters, spaces, and punctuation (.,'-).",
-    }),
-    educationalLevel: Joi.string()
-    .min(3)
-    .required()
-    .pattern(new RegExp(/^[A-Za-z .,'-]+$/))  // Allows letters, spaces, and common punctuations (.,'-)
-    .messages({
-        "any.required": "First name is required.",
-        "string.empty": "First name cannot be an empty string.",
-        "string.min": "First name must be at least 3 characters long.",
-        "string.pattern.base": "First name can only contain letters, spaces, and punctuation (.,'-).",
-    }),
-    feildExperience: Joi.string()
-    .min(3)
-    .required()
-    .pattern(new RegExp(/^[A-Za-z .,'-]+$/))  // Allows letters, spaces, and common punctuations (.,'-)
-    .messages({
-        "any.required": "First name is required.",
-        "string.empty": "First name cannot be an empty string.",
-        "string.min": "First name must be at least 3 characters long.",
-        "string.pattern.base": "First name can only contain letters, spaces, and punctuation (.,'-).",
-    }),
+      })
 
   });
   
