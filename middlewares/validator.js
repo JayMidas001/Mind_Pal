@@ -36,9 +36,7 @@ const validationSignUp = (req, res, next) => {
         "string.pattern.base":
           "Password must contain at least 8 characters, one capital letter, and one special character (!@#$%^&*).",
       })
-
   });
-  
 
   // Validate the request body against the schema
   const { error } = schema.validate(req.body, { abortEarly: false });

@@ -5,28 +5,28 @@ const therapistSchema = new mongoose.Schema({
         const capitalize =
         entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
           return capitalize;},required:[true,'Kindly enter your first name'],
-        required:true
+        
     },
     lastName:{type:String,set: (entry) => {
         const capitalize =
         entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
           return capitalize;},required:[true,'Kindly enter your last name'],
-        required:true
+        
     },
     specialty: { 
         type: String, 
         required:[true, "Kindly enter your specialty"],
-        required: true
+        
      },
      educationalLevel: { 
         type: String, 
         required:[true, "Kindly enter your level of education"],
-        required: true
+        
      },
      fieldExperience: { 
         type: String, 
         required:[true, "Kindly enter your experience on the field"],
-        required: true
+        
      },
     idCard: { 
         type: String,

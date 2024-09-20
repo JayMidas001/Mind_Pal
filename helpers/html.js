@@ -290,7 +290,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Appointment Confirmed</h1>
+            <h1>New Appointment Booked </h1>
           </div>
           <div class="content">
             <p>Hello ${firstName},</p>

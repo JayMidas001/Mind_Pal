@@ -1,13 +1,14 @@
 const express = require("express")
 const upload = require("../utils/multer")
 
-const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getAll, getOne, deleteUser, makeAdmin, logOut, updateUser } = require("../controllers/userController")
+const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getAll, getOne, deleteUser, makeAdmin, logOut, updateUser, createMessage } = require("../controllers/userController")
 
 const router = express.Router()
 
 const { validationSignUp, validationLogIn, validationEmail, validationPassword, validationUpdate } = require("../middlewares/validator")
 
 const authorize = require("../middlewares/auth")
+
 
 
 router.post("/sign-up",validationSignUp, signUp)
@@ -35,5 +36,7 @@ router.delete('/delete/:userId',authorize, deleteUser)
 router.get('/makeadmin/:userId',authorize, makeAdmin)
 
 router.post("/log-out", logOut)
+
+router.post('/message/:userId', createMessage);
 
 module.exports = router

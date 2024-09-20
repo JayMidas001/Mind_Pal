@@ -37,7 +37,7 @@ const validationSignUp = (req, res, next) => {
     }),
     
     password: Joi.string()
-      .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
+      .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
       .required()
       .messages({
         "any.required": "Password is required.",
@@ -98,7 +98,7 @@ const validationLogIn = (req, res, next) => {
       }),
       
       password: Joi.string()
-        .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
+        .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
         .required()
         .messages({
           "any.required": "Password is required.",
@@ -174,7 +174,7 @@ const validationUpdate = (req, res, next) => {
     }),
     
     password: Joi.string()
-      .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
+      .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
       .messages({
         "string.pattern.base":
           "Password must contain at least 8 characters, one capital letter, and one special character (!@#$%^&*).",
@@ -202,13 +202,13 @@ const validationPassword = (req, res, next) => {
   const schema = Joi.object({
    
     newPassword: Joi.string()
-      .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
+      .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
       .messages({
         "string.pattern.base":
           "New password must contain at least 8 characters, one capital letter, and one special character (!@#$%^&*).",
       }),
     existingPassword: Joi.string()
-      .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
+      .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
       .messages({
         "string.pattern.base":
           "Existing password must contain at least 8 characters, one capital letter, and one special character (!@#$%^&*).",

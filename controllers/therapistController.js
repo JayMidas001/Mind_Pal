@@ -13,9 +13,9 @@ const {
 
 exports.signUpTherapist = async (req, res) => {
     try {
-        const { firstName, lastName, specialty, educationalLevel, fieldExperience, phoneNumber, email, password } = req.body;
+        const { firstName, lastName, specialty, phoneNumber, educationalLevel, fieldExperience, email, password } = req.body;
 
-        if (!firstName || !lastName || !specialty || !educationalLevel || !fieldExperience || !phoneNumber || !email || !password) {
+        if (!firstName || !lastName || !specialty ||  !phoneNumber || !fieldExperience || !educationalLevel  || !email || !password) {
             return res.status(401).json({ message: 'Enter all fields.' });
         }
 

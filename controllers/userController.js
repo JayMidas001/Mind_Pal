@@ -87,7 +87,9 @@ exports.verifyEmail = async (req, res) => {
         // Save the user data
         await user.save();
         // Send a success response
-        return res.redirect('https://mindpal-11.vercel.app/#/waitingforverification')
+        res.status(200).json({
+            message: "User verified successfully",
+        });
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
             return res.json({ message: "Link expired." });
@@ -210,7 +212,9 @@ exports.forgotPassword = async (req, res) => {
         const resetToken = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
             expiresIn: "30m",
         });
-        const resetLink = `https://mindpal-11.vercel.app/#/reset-password/${resetToken}`;
+        const resetLink = `${req.protocol}://${req.get(
+            "host"
+        )}/api/v1/user/reset-password/${resetToken}`;
 
         // Send reset password email
         const mailOptions = {
@@ -451,3 +455,74 @@ exports.logOut = async (req, res) => {
         });
     }
 }
+
+
+exports.createMessage = async (req, res) => {
+    try {
+        const { firstName, lastName, email, message } = req.body;
+        const userId = req.user.id; // Extract userId from the token (from JWT)
+
+        // Validate required fields
+        if (!firstName || !lastName || !email || !message) {
+            return res.status(400).json({ error: 'All fields are required.' });
+        }
+
+        // Find the user by userId
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        // Create a new message and push it into the user's messages array
+        user.messages.push({
+            firstName,
+            lastName,
+            email,
+            message
+        });
+
+        // Save the updated user document
+        await user.save();
+
+        res.status(201).json({ message: 'Message added successfully.' });
+    } catch (error) {
+        res.status(500).json({ status: 'An error occurred while adding the message.', 
+                                message:error.message });
+    }
+};
+
+const User = require('../models/userModel');
+
+exports.createMessage = async (req, res) => {
+    try {
+        const {userId}= req.params
+        const { firstName, lastName, email, message } = req.body;
+       
+
+        // Validate required fields
+        if (!firstName || !lastName || !email || !message) {
+            return res.status(400).json({ error: 'All fields are required.' });
+        }
+
+        // Find the user by userId
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        // Create a new message and push it into the user's messages array
+        user.messages.push({
+            firstName,
+            lastName,
+            email,
+            message
+        });
+
+        // Save the updated user document
+        await user.save();
+
+        res.status(201).json({ message: 'Message added successfully.' });
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while adding the message.' });
+    }
+};
