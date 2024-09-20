@@ -63,7 +63,7 @@ const validationSignUp = (req, res, next) => {
           "string.min": "First name must be at least 3 characters long.",
           "string.pattern.base": "First name can only contain letters, spaces, and punctuation (.,'-).",
       }),
-      feildExperience: Joi.string()
+      fieldExperience: Joi.string()
       .min(3)
       .required()
       .pattern(new RegExp(/^[A-Za-z .,'-]+$/))  // Allows letters, spaces, and common punctuations (.,'-)

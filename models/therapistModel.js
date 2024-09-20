@@ -23,7 +23,7 @@ const therapistSchema = new mongoose.Schema({
         required:[true, "Kindly enter your level of education"],
         required: true
      },
-     feildExperience: { 
+     fieldExperience: { 
         type: String, 
         required:[true, "Kindly enter your experience on the field"],
         required: true
