@@ -13,7 +13,7 @@ const validationSignUp = (req, res, next) => {
         "string.min": "First name must be at least 3 characters long.",
         "string.pattern.base": "First name cannot start or end with whitespace and cannot contain punctuation.",
       }),
-      lastName: Joi.string()
+    lastName: Joi.string()
       .min(3)
       .required()
       .pattern(new RegExp(/^[A-Za-z]+(?: [A-Za-z]+)*$/)) // Adjust regex to disallow punctuation
@@ -23,7 +23,7 @@ const validationSignUp = (req, res, next) => {
         "string.min": "Last name must be at least 3 characters long.",
         "string.pattern.base": "Last name cannot start or end with whitespace and cannot contain punctuation.",
       }),
-      phoneNumber: Joi.string()
+    phoneNumber: Joi.string()
       .length(11)
       .pattern(/^\d+$/)
       .messages({
@@ -37,13 +37,14 @@ const validationSignUp = (req, res, next) => {
     }),
     
     password: Joi.string()
-      .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
+      .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
       .required()
       .messages({
         "any.required": "Password is required.",
         "string.pattern.base":
           "Password must contain at least 8 characters, one capital letter, and one special character (!@#$%^&*).",
-      }),specialty: Joi.string()
+      }),
+    specialty: Joi.string()
       .min(3)
       .required()
       .pattern(new RegExp(/^[A-Za-z .,'-]+$/))  // Allows letters, spaces, and common punctuations (.,'-)
@@ -53,7 +54,7 @@ const validationSignUp = (req, res, next) => {
           "string.min": "First name must be at least 3 characters long.",
           "string.pattern.base": "First name can only contain letters, spaces, and punctuation (.,'-).",
       }),
-      educationalLevel: Joi.string()
+    educationalLevel: Joi.string()
       .min(3)
       .required()
       .pattern(new RegExp(/^[A-Za-z .,'-]+$/))  // Allows letters, spaces, and common punctuations (.,'-)
@@ -63,7 +64,7 @@ const validationSignUp = (req, res, next) => {
           "string.min": "First name must be at least 3 characters long.",
           "string.pattern.base": "First name can only contain letters, spaces, and punctuation (.,'-).",
       }),
-      fieldExperience: Joi.string()
+    fieldExperience: Joi.string()
       .min(3)
       .required()
       .pattern(new RegExp(/^[A-Za-z .,'-]+$/))  // Allows letters, spaces, and common punctuations (.,'-)
@@ -97,7 +98,7 @@ const validationLogIn = (req, res, next) => {
       }),
       
       password: Joi.string()
-        .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
+        .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
         .required()
         .messages({
           "any.required": "Password is required.",
@@ -173,7 +174,7 @@ const validationUpdate = (req, res, next) => {
     }),
     
     password: Joi.string()
-      .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
+      .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
       .messages({
         "string.pattern.base":
           "Password must contain at least 8 characters, one capital letter, and one special character (!@#$%^&*).",
@@ -201,13 +202,13 @@ const validationPassword = (req, res, next) => {
   const schema = Joi.object({
    
     newPassword: Joi.string()
-      .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
+      .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
       .messages({
         "string.pattern.base":
           "New password must contain at least 8 characters, one capital letter, and one special character (!@#$%^&*).",
       }),
     existingPassword: Joi.string()
-      .pattern(new RegExp("^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$"))
+      .pattern(new RegExp("^(?=.[!@#$%^&])(?=.*[A-Z]).{8,}$"))
       .messages({
         "string.pattern.base":
           "Existing password must contain at least 8 characters, one capital letter, and one special character (!@#$%^&*).",
