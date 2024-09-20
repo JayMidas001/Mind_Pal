@@ -29,7 +29,7 @@ router.post(`/reset-password/:token`, resetPassword)
 
 router.get('/one/:therapistId', getOneTherapist)
 
-router.get('/all',authorize, getAllTherapists)
+router.get('/all', getAllTherapists)
 
 router.put('/update/:therapistId', upload.single('photo'),validationUpdate, updateTherapist)
 
