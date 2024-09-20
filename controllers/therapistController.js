@@ -320,8 +320,8 @@ exports.changePassword = async(req, res)=>{
 
 exports.getOneTherapist = async(req, res)=>{
     try {
-        const {id} = req.params
-        const oneTherapist = await therapistModel.findById(id);
+        const {therapistId} = req.params
+        const oneTherapist = await therapistModel.findById(therapistId);
         if(!oneTherapist){
             return res.status(404).json({
                 message: ' therapist not found'
