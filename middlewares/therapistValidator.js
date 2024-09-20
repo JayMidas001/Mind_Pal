@@ -72,7 +72,7 @@ const validationSignUp = (req, res, next) => {
           "string.empty": "First name cannot be an empty string.",
           "string.min": "First name must be at least 3 characters long.",
           "string.pattern.base": "First name can only contain letters, spaces, and punctuation (.,'-).",
-      })
+      }), certificate: Joi.string().optional(),
   });
 
   // Validate the request body against the schema
