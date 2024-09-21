@@ -50,7 +50,7 @@ exports.bookAppointment = async (req, res) => {
     await sendMail({
       subject: 'Appointment Notification',
       email: therapist.email,
-      html: html.therapistNotificationTemplate(therapist.firstName, user.firstName, date, time),
+      html: html.therapistNotificationTemplate(therapist.firstName, user.firstName, date, time, user.email),
     });
 
     res.status(201).json({ message: "Appointment booked successfully", appointment: savedAppointment });
