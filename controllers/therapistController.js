@@ -15,7 +15,7 @@ exports.signUpTherapist = async (req, res) => {
     try {
         const { firstName, lastName, specialty, phoneNumber, educationalLevel, fieldExperience, email, password } = req.body;
 
-        if (!firstName || !lastName || !specialty ||  !phoneNumber || !fieldExperience || !educationalLevel  || !email || !password) {
+        if (!firstName || !lastName || !specialty || !phoneNumber || !fieldExperience || !educationalLevel || !email || !password) {
             return res.status(401).json({ message: 'Enter all fields.' });
         }
 
@@ -30,49 +30,79 @@ exports.signUpTherapist = async (req, res) => {
         let certificateUrl = null;
         let idCardUrl = null;
 
-        if (req.files) {
-            // Handling certificate upload
-            if (req.files.certificate) {
-                const certificate = req.files.certificate[0]; // Access file from req.files
-                const result = await cloudinary.uploader.upload(certificate.path);
-                certificateUrl = result.secure_url;
-            }
+if (req.files) {
+    // Log the full req.files object to ensure files are being uploaded correctly
+    console.log("Received files:", req.files);
 
-            // Handling ID card upload
-            if (req.files.idCard) {
-                const idCard = req.files.idCard[0]; // Access file from req.files
-                const result = await cloudinary.uploader.upload(idCard.path);
-                idCardUrl = result.secure_url;
-            }
+    // Upload ID card
+    if (req.files.idCard && req.files.idCard.length > 0) {
+        try {
+            const idCard = req.files.idCard[0];
+            console.log("Uploading ID card:", idCard);
+            const results = await cloudinary.uploader.upload(idCard.path);
+            idCardUrl = results.secure_url;
+            console.log("ID card uploaded:", idCardUrl);
+        } catch (error) {
+            console.error("Error uploading ID card:", error);
+            return res.status(500).json({ message: 'Error uploading ID card' });
         }
+    } else {
+        console.error("ID card file is missing or empty.");
+    }
+
+    // Upload certificate
+    if (req.files.certificate && req.files.certificate.length > 0) {
+        try {
+            const certificate = req.files.certificate[0];
+            console.log("Uploading certificate:", certificate);
+            const result = await cloudinary.uploader.upload(certificate.path);
+            certificateUrl = result.secure_url;
+            console.log("Certificate uploaded:", certificateUrl);
+        } catch (error) {
+            console.error("Error uploading certificate:", error);
+            return res.status(500).json({ message: 'Error uploading certificate' });
+        }
+    } else {
+        console.error("Certificate file is missing or empty.");
+    }
+} else {
+    console.error("No files found in request.");
+}
+
+// if (!certificateUrl || !idCardUrl) {
+//     return res.status(400).json({ message: 'Failed to upload required documents' });
+// }
+
+
         const therapist = new therapistModel({
             firstName,
             lastName,
             specialty,
             educationalLevel,
             fieldExperience,
-            idCard: idCardUrl,
             certificate: certificateUrl,
+            idCard: idCardUrl,
             phoneNumber,
             email: email.toLowerCase(),
             password: hashedPassword,
         });
 
         const therapistToken = jwt.sign({ id: therapist._id, email: therapist.email }, process.env.JWT_SECRET, { expiresIn: '10m' });
-        const verifyLink = `${req.protocol}://${req.get('host')}/api/v1/therapist/verify/${therapistToken}`;
+        const verifyLink = `https://mindpal-11.vercel.app/#/waitingforverification/${therapistToken}`;
 
         await therapist.save();
         await sendMail({
             subject: 'Kindly verify your email',
             email: therapist.email,
-            html: signUpTemplate(verifyLink, therapist.firstName)
+            html: signUpTemplate(verifyLink, therapist.firstName),
         });
 
         res.status(201).json({
             message: `Welcome ${therapist.firstName}, kindly check your email to access the link to verify your email`,
-            data: therapist
+            data: therapist,
         });
     } catch (error) {
+        console.error("Error during therapist sign-up:", error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -179,7 +209,7 @@ exports.resendVerificationEmail = async(req, res)=>{
         }
 
         const token = jwt.sign({email:therapist.email}, process.env.JWT_SECRET, {expiresIn: '20min'})
-        const verifyLink = `${req.protocol}://${req.get('host')}/api/v1/therapist/verify/${token}`
+        const verifyLink = `https://mindpal-11.vercel.app/#/waitingforverification/${token}`
         let mailOptions ={
             email: therapist.email,
             subject:'verification Email',
@@ -214,7 +244,7 @@ exports.forgotPassword = async (req, res)=>{
 
         // generate a reset token
         const resetToken = jwt.sign({email:therapist.email}, process.env.JWT_SECRET,{expiresIn:'30m'})
-        const resetLink = `${req.protocol}://${req.get('host')}/api/v1/therapist/reset-password/${resetToken}`
+        const resetLink = `https://mindpal-11.vercel.app/#/reset-password/${resetToken}`
 
         //send a reset password email
         const mailOptions = {
