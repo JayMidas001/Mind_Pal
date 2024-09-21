@@ -32,7 +32,6 @@ exports.signUpTherapist = async (req, res) => {
 
 if (req.files) {
     // Log the full req.files object to ensure files are being uploaded correctly
-    ÷
 
     // Upload ID card
     if (req.files.idCard && req.files.idCard.length > 0) {
