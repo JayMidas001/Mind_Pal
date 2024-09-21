@@ -39,9 +39,7 @@ exports.signUp = async (req, res) => {
                 process.env.JWT_SECRET,
                 { expiresIn: "10 Minutes" }
             );
-            const verifyLink = `${req.protocol}://${req.get(
-                "host"
-            )}/api/v1/user/verify/${userToken}`;
+            const verifyLink = `https://mindpal-11.vercel.app/#/waitingforverification/verify/${userToken}`;
 
             await user.save();
             await sendMail({
@@ -174,9 +172,7 @@ exports.resendVerificationEmail = async (req, res) => {
         const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
             expiresIn: "20mins",
         });
-        const verifyLink = `${req.protocol}://${req.get(
-            "host"
-        )}/api/v1/user/verify/${token}`;
+        const verifyLink = `https://mindpal-11.vercel.app/#/waitingforverification/verify/${token}`;
         let mailOptions = {
             email: user.email,
             subject: "Verification email",
