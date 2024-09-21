@@ -69,9 +69,6 @@ if (req.files) {
     console.error("No files found in request.");
 }
 
-// if (!certificateUrl || !idCardUrl) {
-//     return res.status(400).json({ message: 'Failed to upload required documents' });
-// }
 
 
         const therapist = new therapistModel({
