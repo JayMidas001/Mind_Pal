@@ -208,9 +208,7 @@ exports.forgotPassword = async (req, res) => {
         const resetToken = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
             expiresIn: "30m",
         });
-        const resetLink = `${req.protocol}://${req.get(
-            "host"
-        )}/api/v1/user/reset-password/${resetToken}`;
+        const resetLink = `https://mindpal-11.vercel.app/#/reset-password/${resetToken}`;
 
         // Send reset password email
         const mailOptions = {
