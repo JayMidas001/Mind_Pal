@@ -32,18 +32,18 @@ exports.signUpTherapist = async (req, res) => {
 
 if (req.files) {
     // Log the full req.files object to ensure files are being uploaded correctly
-    console.log("Received files:", req.files);
+    ÷
 
     // Upload ID card
     if (req.files.idCard && req.files.idCard.length > 0) {
         try {
             const idCard = req.files.idCard[0];
-            console.log("Uploading ID card:", idCard);
+            // console.log("Uploading ID card:", idCard);
             const results = await cloudinary.uploader.upload(idCard.path);
             idCardUrl = results.secure_url;
-            console.log("ID card uploaded:", idCardUrl);
+            // console.log("ID card uploaded:", idCardUrl);
         } catch (error) {
-            console.error("Error uploading ID card:", error);
+            // console.error("Error uploading ID card:", error);
             return res.status(500).json({ message: 'Error uploading ID card' });
         }
     } else {
@@ -54,12 +54,12 @@ if (req.files) {
     if (req.files.certificate && req.files.certificate.length > 0) {
         try {
             const certificate = req.files.certificate[0];
-            console.log("Uploading certificate:", certificate);
+            // console.log("Uploading certificate:", certificate);
             const result = await cloudinary.uploader.upload(certificate.path);
             certificateUrl = result.secure_url;
-            console.log("Certificate uploaded:", certificateUrl);
+            // console.log("Certificate uploaded:", certificateUrl);
         } catch (error) {
-            console.error("Error uploading certificate:", error);
+            // console.error("Error uploading certificate:", error);
             return res.status(500).json({ message: 'Error uploading certificate' });
         }
     } else {
