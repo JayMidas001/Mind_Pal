@@ -129,7 +129,7 @@ exports.loginUser = async (req, res) => {
             });
         }
 
-        const token = await jwt.sign(
+        const token = jwt.sign(
             {
                 userId: existingUser._id,
                 email: existingUser.email,

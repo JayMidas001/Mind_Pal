@@ -1,42 +1,65 @@
-const express = require("express")
-const upload = require("../utils/multer")
+const express = require("express");
+const upload = require("../utils/multer");
 
-const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getAll, getOne, deleteUser, makeAdmin, logOut, updateUser, createMessage } = require("../controllers/userController")
+const {
+  signUp,
+  loginUser,
+  verifyEmail,
+  resendVerificationEmail,
+  forgotPassword,
+  changePassword,
+  resetPassword,
+  getAll,
+  getOne,
+  deleteUser,
+  makeAdmin,
+  logOut,
+  updateUser,
+  createMessage,
+} = require("../controllers/userController");
 
-const router = express.Router()
+const router = express.Router();
 
-const { validationSignUp, validationLogIn, validationEmail, validationPassword, validationUpdate } = require("../middlewares/validator")
+const {
+  validationSignUp,
+  validationLogIn,
+  validationEmail,
+  validationPassword,
+  validationUpdate,
+} = require("../middlewares/validator");
+const { adminAuth } = require("../middlewares/auth");
 
-const authorize = require("../middlewares/auth")
+router.post("/sign-up", validationSignUp, signUp);
 
+router.post("/log-in", validationLogIn, loginUser);
 
+router.get("/verify/:token", verifyEmail);
 
-router.post("/sign-up",validationSignUp, signUp)
+router.post("/resend-verification", validationEmail, resendVerificationEmail);
 
-router.post("/log-in",validationLogIn, loginUser)
+router.post("/forgot-password", validationEmail, forgotPassword);
 
-router.get('/verify/:token', verifyEmail)
+router.post("/change-password/:token", validationPassword, changePassword);
 
-router.post('/resend-verification',validationEmail, resendVerificationEmail)
+router.post("/reset-password/:token", resetPassword);
 
-router.post('/forgot-password',validationEmail, forgotPassword)
+router.put(
+  "/update-user/:userId",
+  upload.single("image"),
+  validationUpdate,
+  updateUser
+);
 
-router.post('/change-password/:token',validationPassword, changePassword)
+router.get("/getall", adminAuth, getAll);
 
-router.post('/reset-password/:token', resetPassword)
+router.get("/getone/:userId", getOne);
 
-router.put("/update-user/:userId",upload.single('image'), validationUpdate, updateUser)
+router.delete("/delete/:userId", adminAuth, deleteUser);
 
-router.get('/getall',authorize, getAll)
+router.get("/makeadmin/:userId", adminAuth, makeAdmin);
 
-router.get('/getone/:userId', getOne)
+router.post("/log-out", logOut);
 
-router.delete('/delete/:userId',authorize, deleteUser)
+router.post("/message/:userId", createMessage);
 
-router.get('/makeadmin/:userId',authorize, makeAdmin)
-
-router.post("/log-out", logOut)
-
-router.post('/message/:userId', createMessage);
-
-module.exports = router
+module.exports = router;
