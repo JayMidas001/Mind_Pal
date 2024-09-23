@@ -6,9 +6,9 @@ const therapistModel = require("../models/therapistModel");
 const { sendMail } = require("../helpers/email");
 const html = require(`../helpers/html`);
 
+
 exports.bookAppointment = async (req, res) => {
   try {
-    // const { userId } = req.user;
     const { userId } = req.params;
     const { therapistId, date, time } = req.body;
 
@@ -34,18 +34,22 @@ exports.bookAppointment = async (req, res) => {
       return res.status(404).json({ message: "User or therapist not found" });
     }
 
-    const now = new Date();
-   
-    // Check if the appointment date is in the past
-    if (date < now) {
-      return res
-        .status(400)
-        .json({ message: "You cannot book an appointment in the past" });
+    // Check if the therapist is available on the requested date and time
+    const existingAppointment = await appointmentModel.findOne({
+      therapist: therapistId,
+      date,
+      time
+    });
+
+    if (existingAppointment) {
+      return res.status(400).json({
+        message: "Therapist is not available at the selected date and time",
+      });
     }
 
     // Create new appointment
     const appointment = new appointmentModel({
-      user: userId, // Important to link the user here
+      user: userId, // Link the user here
       therapist: therapistId,
       date,
       time,
@@ -94,11 +98,10 @@ exports.bookAppointment = async (req, res) => {
     });
   } catch (error) {
     console.error("Error booking appointment:", error);
-    res
-      .status(500)
-      .json({ status: "Error booking appointment", error: error.message });
+    res.status(500).json({ status: "Error booking appointment", error: error.message });
   }
 };
+
 
 exports.getPendingAppointmentsForUser = async (req, res) => {
   try {
