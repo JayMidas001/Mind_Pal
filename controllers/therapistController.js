@@ -348,25 +348,31 @@ exports.changePassword = async(req, res)=>{
     }
 }
 
-exports.getOneTherapist = async(req, res)=>{
+exports.getOneTherapist = async (req, res) => {
     try {
-        const {therapistId} = req.params
-        const oneTherapist = await therapistModel.findById(therapistId);
-        if(!oneTherapist){
+        const { therapistId } = req.params;
+
+        // Find therapist by ID and populate the appointments array
+        const oneTherapist = await therapistModel
+            .findById(therapistId)
+            .populate('appointments');  // Populates the appointments array
+
+        if (!oneTherapist) {
             return res.status(404).json({
-                message: ' therapist not found'
-            })
+                message: 'Therapist not found',
+            });
         }
+
         res.status(200).json({
-            message: 'therapist details',
-            data: oneTherapist
-        })
+            message: 'Therapist details with appointments',
+            data: oneTherapist,
+        });
     } catch (error) {
         res.status(500).json({
-            message: error.message
-        })
+            message: error.message,
+        });
     }
-}
+};
 
 exports.getAllTherapists = async(req, res)=>{
     try {
