@@ -6,7 +6,6 @@ const therapistModel = require("../models/therapistModel");
 const { sendMail } = require("../helpers/email");
 const html = require(`../helpers/html`);
 
-
 exports.bookAppointment = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -101,7 +100,6 @@ exports.bookAppointment = async (req, res) => {
     res.status(500).json({ status: "Error booking appointment", error: error.message });
   }
 };
-
 
 exports.getPendingAppointmentsForUser = async (req, res) => {
   try {

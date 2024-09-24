@@ -18,7 +18,9 @@ app.use("/api/v1/appointment", appointmentRouter)
 
 const PORT = process.env.PORT || 1111
 
-app.get(`/`, )
+app.get(`/`,(req,res)=>{
+    res.send("welcome to MindPal")
+})
 
 app.listen(PORT, ()=>{
     console.log(`server is listening to PORT: ${PORT}`)
